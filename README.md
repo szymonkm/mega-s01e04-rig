@@ -48,7 +48,7 @@ outside the checkout. The artifact expires after one day; the published page rem
 4. Add `S01E04_LANE_MARKER` as an Actions secret through the secret settings. Never paste its value into an issue or chat.
 5. Run `Publish review preview` on the reviewed default branch with `include_marker` set to `true`.
 6. Confirm that [the public preview](https://szymonkm.github.io/mega-s01e04-rig/) opens over HTTPS and shows the expected digest and banner.
-7. Send the reviewer the public link and the plan's issue links. Keep issue #6 open until this is done.
+7. Send the reviewer the public link and the plan's issue links. Keep issue #6 open until the reviewer accepts the page.
 
 The workflow fails when `include_marker` is `true` and the secret is missing or blank.
 It runs tests and type checks before rendering. Pages deployment uses the `github-pages`
@@ -56,11 +56,11 @@ environment. Configure its protection rules if the repository supports required 
 
 ### Replace after review
 
-Replacement needs a separate human approval after review. Approval for the first publication
-does not approve replacement.
+Start replacement only after the reviewer accepts the page. Replacement then needs separate
+user approval. Approval for the first publication does not approve replacement.
 
 1. Prepare a clean copy and confirm that its banner reads `no marker set`.
-2. Obtain human approval to replace the public page at the same URL.
+2. After reviewer acceptance, obtain separate user approval to replace the public page at the same URL.
 3. Run the same workflow with `include_marker` set to `false` (the default).
 4. Check the public URL again. Confirm that the marker is absent and the banner reads `no marker set`.
 5. Complete the cleanup issue and archive the plan only after the public check succeeds.
