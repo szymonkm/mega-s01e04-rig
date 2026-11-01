@@ -43,9 +43,9 @@ A push does not publish the page. Its artifact is `$RUNNER_TEMP/rig-pages/index.
 outside the checkout. The artifact expires after one day; the published page remains until replaced.
 
 1. Merge the reviewed code and lockfile into the default branch.
-2. Configure Pages to use **GitHub Actions** in the repository settings.
-3. Add `S01E04_LANE_MARKER` as an Actions secret through the secret settings. Never paste its value into an issue or chat.
-4. Obtain separate human approval for the first public Pages publication, including its lane marker.
+2. Obtain separate human approval for the first public Pages publication, including its lane marker.
+3. Configure Pages to use **GitHub Actions** in the repository settings.
+4. Add `S01E04_LANE_MARKER` as an Actions secret through the secret settings. Never paste its value into an issue or chat.
 5. Run `Publish review preview` on the reviewed default branch with `include_marker` set to `true`.
 6. Confirm that [the public preview](https://szymonkm.github.io/mega-s01e04-rig/) opens over HTTPS and shows the expected digest and banner.
 7. Send the reviewer the public link and the plan's issue links. Keep issue #6 open until this is done.
