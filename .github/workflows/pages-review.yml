@@ -1,0 +1,76 @@
+name: Publish review preview
+
+# A push must never publish or replace the review page.
+on:
+  workflow_dispatch:
+    inputs:
+      include_marker:
+        description: Include the lane marker (requires approval for public review)
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-review
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: pnpm/action-setup@v6
+        with:
+          version: '11.25.0'
+          run_install: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Test
+        run: pnpm test
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Render review page outside the checkout
+        env:
+          INCLUDE_MARKER: ${{ inputs.include_marker }}
+          REVIEW_LANE_MARKER: ${{ secrets.S01E04_LANE_MARKER }}
+        shell: bash
+        run: |
+          if [ "$INCLUDE_MARKER" = "true" ]; then
+            if [ -z "${REVIEW_LANE_MARKER//[[:space:]]/}" ]; then
+              echo 'S01E04_LANE_MARKER is required when include_marker is true.' >&2
+              exit 1
+            fi
+            export LANE_MARKER="$REVIEW_LANE_MARKER"
+          else
+            unset LANE_MARKER
+          fi
+          unset REVIEW_LANE_MARKER
+          pnpm preview:render --output "$RUNNER_TEMP/rig-pages/index.html"
+      - name: Upload review page
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/rig-pages
+          retention-days: 1
+
+  deploy:
+    needs: render
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish approved page
+        id: deployment
+        uses: actions/deploy-pages@v4
