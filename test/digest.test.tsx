@@ -56,19 +56,19 @@ describe('digest routes', () => {
           error: '<img src=x onerror=alert(1)>',
         }),
         JSON.stringify({
-          at: '2026-10-28T10:10:00+05:30',
+          at: '2026-10-28T13:10:00+05:30',
           job: '<script>alpha</script>',
           status: 'retry',
           owner: null,
         }),
         JSON.stringify({
-          at: '2026-10-28T11:10:00+05:30',
+          at: '2026-10-28T14:10:00+05:30',
           job: '<script>alpha</script>',
           status: 'retry',
           owner: null,
         }),
         JSON.stringify({
-          at: '2026-10-28T12:10:00+05:30',
+          at: '2026-10-28T15:10:00+05:30',
           job: '<script>alpha</script>',
           status: 'fail',
           owner: null,
@@ -106,11 +106,11 @@ describe('digest routes', () => {
       lastStatus: 'fail',
       lastError: '<img src=x onerror=alert(1)>',
       firstAt: '2026-10-28T09:10:00+02:00',
-      lastAt: '2026-10-28T12:10:00+05:30',
+      lastAt: '2026-10-28T15:10:00+05:30',
     });
     expect(html).toContain('—');
     expect(html).toContain('2026-10-28T09:10:00+02:00');
-    expect(html).toContain('2026-10-28T12:10:00+05:30');
+    expect(html).toContain('2026-10-28T15:10:00+05:30');
     expect(html).toContain('class="warn">3</td>');
     expect(html).toContain('class="warn">fail</td>');
   });
